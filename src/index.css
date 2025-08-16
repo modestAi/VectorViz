@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+
+#root {
+  display: flex;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+
+@theme {
+
+  --color-overlay-light-0: rgba(255, 255, 255, 0.05);
+  --color-overlay-light-1: rgba(255, 255, 255, 0.1);
+  --color-overlay-light-2: rgba(255, 255, 255, 0.2);
+
+}
+
+@layer components {
+  .input-style {
+    @apply text-[14px] focus:bg-overlay-light-1 bg-overlay-light-0 rounded px-2 py-1 border-[1px] border-overlay-light-0 focus:border-overlay-light-2 shadow-2xl drop-shadow-white outline-none text-center w-[50px];
+
+  }
+}
