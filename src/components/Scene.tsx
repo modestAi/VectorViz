@@ -1,7 +1,7 @@
 import * as THREE from "three";
-import { Canvas } from "@react-three/fiber";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { OrbitControls, CameraControls, Plane } from "@react-three/drei";
+import { Canvas, useThree } from "@react-three/fiber";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { CameraControls, Plane } from "@react-three/drei";
 import type { VectorType } from "../store/VectorSlice";
 import Text3D from "./Font";
 import React from "react";
@@ -14,92 +14,86 @@ type SceneProps = {
   afterReset: () => void;
   cameraResetRequestState: boolean;
 };
-
 export default function Scene({ afterReset, cameraResetRequestState, max = 10 }: SceneProps) {
-  const vecList = useSelector((data: RootState) => data.vectorList);
+  const vecList = useSelector((state: RootState) => state.vectorList);
+  const defaultPos = useMemo(() => new THREE.Vector3(1, 1, max + 1), [max]);
 
-  const defaultPos = useRef<[number, number, number]>([1, 1, max + 1]);
-  const cameraRef = useRef(
-    new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.01, 2000)
-  );
-
-  // Set initial camera position only once
-  useEffect(() => {
-    cameraRef.current.position.set(...defaultPos.current);
-  }, []);
-
-  const [animate, setAnimate] = useState(false);
-
-  // Reset camera position when requested
-  useEffect(() => {
-    if (cameraResetRequestState) {
-      setAnimate(true);
-      afterReset();
-    }
-  }, [cameraResetRequestState, afterReset]);
+  const controlsRef = useRef<CameraControls>(null!); //Will exist
 
   return (
-    <Canvas gl={{ antialias: true }} dpr={[1, 2]} camera={cameraRef.current}>
-      <CoordinateSystem max={max} />
+    <Canvas
+      gl={{ antialias: true }}
+      dpr={[1, 2]}
+      camera={{ fov: 90, near: 0.01, far: 2000, position: [1, 1, max + 1] }}
+    >
+      <SceneContents
+        vecList={vecList}
+        max={max}
+        defaultPos={defaultPos}
+        controlsRef={controlsRef}
+        cameraResetRequestState={cameraResetRequestState}
+        afterReset={afterReset}
+      />
+    </Canvas>
+  );
+}
 
+function SceneContents({
+  vecList,
+  max,
+  defaultPos,
+  controlsRef,
+  cameraResetRequestState,
+  afterReset,
+}: {
+  vecList: VectorType[];
+  max: number;
+  defaultPos: THREE.Vector3;
+  controlsRef: React.RefObject<CameraControls>; // OK now
+  cameraResetRequestState: boolean;
+  afterReset: () => void;
+}) {
+  const { camera } = useThree();
+
+  const { x, y, z } = defaultPos;
+
+  // Set initial camera position before first frame
+  useLayoutEffect(() => {
+    camera.position.copy(defaultPos);
+  }, [camera, defaultPos]);
+
+  // Trigger reset animation
+  useLayoutEffect(() => {
+    if (cameraResetRequestState && controlsRef.current) {
+      controlsRef.current.setLookAt(x, y, z, 0, 0, 0, true);
+
+      const handleRest = () => {
+        afterReset();
+        controlsRef.current.removeEventListener("sleep", handleRest);
+      };
+
+      controlsRef.current.addEventListener("sleep", handleRest);
+    }
+  }, [cameraResetRequestState, controlsRef, afterReset, defaultPos]);
+
+  return (
+    <>
+      <CoordinateSystem max={max} />
       {vecList.map((v) => (
         <React.Fragment key={v.id}>
           <SolidArrow from={[0, 0, 0]} to={v.vector.toArray()} />
           <CircleContainer vec={v} />
         </React.Fragment>
       ))}
-      {animate && (
-        <AnimateTransition
-          animateTo={
-            new THREE.Vector3(defaultPos.current[0], defaultPos.current[1], defaultPos.current[2])
-          }
-          afterAnimate={() => setAnimate(false)}
-        />
-      )}
+
       <Font text="X" pos={[max, -0.1, -0.1]} color="rgb(2,322,35)" size={0.3} opacity={1} />
       <Font text="Y" pos={[-0.1, max, 0]} color="rgb(212,25,35)" size={0.3} opacity={1} />
       <Font text="Z" pos={[0.1, -0.1, max]} color="rgb(0,0,235)" size={0.3} opacity={1} />
 
       <Lights />
-      <OrbitControls dampingFactor={0.1} />
-    </Canvas>
+      <CameraControls ref={controlsRef} />
+    </>
   );
-}
-
-function AnimateTransition({
-  animateTo,
-  afterAnimate,
-}: {
-  animateTo: THREE.Vector3;
-  afterAnimate: () => void;
-}) {
-  const controlsRef = useRef<CameraControls | null>(null);
-
-  useEffect(() => {
-    const controls = controlsRef.current;
-    if (!controls) return;
-
-    const handleRest = () => {
-      afterAnimate();
-      controls.removeEventListener("rest", handleRest);
-    };
-
-    controls.addEventListener("rest", handleRest);
-
-    controls.setLookAt(
-      animateTo.x, // final camera position
-      animateTo.y,
-      animateTo.z,
-      0, // look-at target (center)
-      0,
-      0,
-      true
-    );
-
-    return () => controls.removeEventListener("rest", handleRest);
-  }, [animateTo, afterAnimate]);
-
-  return <CameraControls ref={controlsRef} />;
 }
 
 function CircleContainer({ vec }: { vec: VectorType }) {

@@ -5,9 +5,10 @@ import Form from "./AddForm";
 import { AnimatePresence, anticipate, motion } from "framer-motion";
 import FieldLister from "./FieldLister";
 
-export default function Container(props: { onReset: () => void }) {
+export default function Container(props: {currentState:boolean,  onReset: () => void }) {
   const [showSettings, setShowSettings] = useState(false);
   const [showFields, setShowFields] = useState(true);
+
   const slideFade = {
     initial: { opacity: 0, x: 20 },
     animate: { opacity: 1, x: 0 },
