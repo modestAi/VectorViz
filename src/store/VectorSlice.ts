@@ -7,7 +7,7 @@ export type VectorType = {
   vector: THREE.Vector3;
 };
 
-const vec1 = new THREE.Vector3(1, 1, 1);
+const vec1 = new THREE.Vector3(5, 3, 4);
 const vec2 = new THREE.Vector3(3, 1, -4);
 
 const initialState: VectorType[] = [

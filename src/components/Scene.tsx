@@ -22,6 +22,8 @@ export default function Scene({ afterReset, cameraResetRequestState, max = 10 }:
   const vecList = useSelector((state: RootState) => state.vectorList);
   const defaultPos = useMemo(() => new THREE.Vector3(1, 1, max + 1), [max]);
 
+
+
   const controlsRef = useRef<CameraControls>(null!); //Will exist
 
   return (
@@ -57,14 +59,17 @@ function SceneContents({
   cameraResetRequestState: boolean;
   afterReset: () => void;
 }) {
-  const { camera } = useThree();
+  const three = useThree();
 
   const { x, y, z } = defaultPos;
 
+
+
+
   // Set initial camera position before first frame
   useLayoutEffect(() => {
-    camera.position.copy(defaultPos);
-  }, [camera, defaultPos]);
+    three.camera.position.copy(defaultPos);
+  }, [three.camera, defaultPos]);
 
   // Trigger reset animation
   useLayoutEffect(() => {
