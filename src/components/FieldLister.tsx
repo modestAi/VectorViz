@@ -6,7 +6,7 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as THREE from "three";
-import { AnimatePresence, motion } from "framer-motion";
+import { schema } from "./AddForm";
 
 function FieldLister() {
   const vecList = useSelector((data: RootState) => data.vectorList);
@@ -19,12 +19,6 @@ function FieldLister() {
   );
 }
 
-const schema = z.object({
-  x: z.coerce.number(),
-  y: z.coerce.number(),
-  z: z.coerce.number(),
-});
-
 type InferType = z.infer<typeof schema>;
 type InputType = z.input<typeof schema>;
 
@@ -33,9 +27,9 @@ function Field(props: { vec: VectorType }) {
 
   const form = useForm<InputType, undefined, InferType>({
     defaultValues: {
-      x: vector.getComponent(0),
-      y: vector.getComponent(1),
-      z: vector.getComponent(2),
+      x: String(vector.getComponent(0)),
+      y: String(vector.getComponent(1)),
+      z: String(vector.getComponent(2)),
     },
     resolver: zodResolver(schema),
   });

@@ -8,10 +8,16 @@ import * as THREE from "three";
 import { v4 as uuidv4 } from "uuid";
 import { motion } from "framer-motion";
 
-const schema = z.object({
-  x: z.coerce.number().optional().default(1),
-  y: z.coerce.number().optional().default(1),
-  z: z.coerce.number().optional().default(1),
+const process = z
+  .string()
+  .min(1)
+  .refine((e) => !isNaN(Number(e)))
+  .transform(Number);
+
+export const schema = z.object({
+  x: process,
+  y: process,
+  z: process,
 });
 
 type InferType = z.infer<typeof schema>;

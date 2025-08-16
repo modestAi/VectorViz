@@ -12,7 +12,7 @@ const vec2 = new THREE.Vector3(3, 1, -4);
 
 const initialState: VectorType[] = [
   { vector: vec1, id: uuidv4() },
-  // { vector: vec2, id: uuidv4() },
+  { vector: vec2, id: uuidv4() },
 ];
 
 const VecSlice = createSlice({
@@ -21,8 +21,7 @@ const VecSlice = createSlice({
   reducers: {
     addVector: (state, action: PayloadAction<VectorType>) => {
       const vecList = state.map((e) => e.vector);
-      if (vecExists(vecList, action.payload.vector)) throw Error("Vector exists already");
-      state.push(action.payload);
+      if (!vecExists(vecList, action.payload.vector)) state.push(action.payload);
       return state;
     },
 
