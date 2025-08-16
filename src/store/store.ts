@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import VectorReducer from "./VectorSlice";
+import SceneConfigReducer from "./SceneConfigSlice";
 
 export const store = configureStore({
   reducer: {
     vectorList: VectorReducer,
+    sceneConfig: SceneConfigReducer,
   },
 });
 

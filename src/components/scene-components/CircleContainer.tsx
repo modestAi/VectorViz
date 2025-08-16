@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import type { VectorType } from "../../store/VectorSlice";
-import Text3D from "../Font";
+import Text3D from "./Font";
+
 
 export function CircleContainer({ vec }: { vec: VectorType }) {
   const { x, y, z } = vec.vector;
@@ -23,7 +24,7 @@ export function CircleContainer({ vec }: { vec: VectorType }) {
       {show && (
         <Text3D
           faceCamera={true}
-          text={`<${x},${y},${z}>`}
+          text={`(${x},${y},${z})`}
           pos={[0.1, 0.1, 0.1]}
           color={"gold"}
           size={0.1}
@@ -31,7 +32,7 @@ export function CircleContainer({ vec }: { vec: VectorType }) {
         />
       )}
       <sphereGeometry args={[0.05]} />
-      <meshPhysicalMaterial color="red" metalness={0.7} />
+      <meshPhysicalMaterial color="red" />
     </mesh>
   );
 }

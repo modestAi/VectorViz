@@ -1,5 +1,6 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import * as THREE from "three";
+import Text3D from "./Font";
 
 type SolidArrowProps = {
   from?: [number, number, number];
@@ -8,43 +9,74 @@ type SolidArrowProps = {
   headLength?: number;
   headRadius?: number;
   color?: string;
+  isShowable?: boolean;
 };
 export function SolidArrow({
-  from = [0, 0, 0], to = [1, 0, 0], shaftRadius = 0.02, headLength = 0.2, headRadius = 0.06, color = "red",
+  from = [0, 0, 0],
+  to = [1, 0, 0],
+  isShowable = false,
+  shaftRadius = 0.02,
+  headLength = 0.2,
+  headRadius = 0.06,
+  color = "red",
 }: SolidArrowProps) {
-  const { shaftPos, headPos, dir, shaftLength } = useMemo(() => {
+  const [show, setShow] = useState(isShowable);
+  const [hover, setHover] = useState(false);
+
+  const { dir, shaftLength } = useMemo(() => {
     const start = new THREE.Vector3(...from);
     const end = new THREE.Vector3(...to);
     const fullDir = new THREE.Vector3().subVectors(end, start);
     const length = fullDir.length();
-    const dir = fullDir.clone().normalize();
-
-    const shaftLength = length - headLength;
-    const shaftPos = start.clone().add(dir.clone().multiplyScalar(shaftLength / 2));
-    const headPos = start.clone().add(dir.clone().multiplyScalar(shaftLength + headLength / 2));
-
-    return { shaftPos, headPos, dir, shaftLength };
+    return { dir: fullDir.normalize(), shaftLength: length - headLength };
   }, [from, to, headLength]);
 
   const quat = useMemo(() => {
     const q = new THREE.Quaternion();
-    q.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir); //Direction for orientation
+    q.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir); // orient along arrow direction
     return q;
   }, [dir]);
 
+  // event side effect
+  useEffect(() => {
+    document.body.style.cursor = hover ? "pointer" : "default";
+  }, [hover]);
+
   return (
-    <>
-      {/* Shaft */}
-      <mesh position={shaftPos.toArray()} quaternion={quat}>
+    <group position={from} quaternion={quat}>
+      {/* Shaft, centered along Y axis */}
+      <mesh
+        position={[0, shaftLength / 2, 0]}
+        onPointerEnter={() => setHover(true)}
+        onPointerLeave={() => setHover(false)}
+        onClick={() => setShow((prev) => !prev)}
+      >
         <cylinderGeometry args={[shaftRadius, shaftRadius, shaftLength]} />
         <meshStandardMaterial color={color} />
       </mesh>
 
-      {/* Head */}
-      <mesh position={headPos.toArray()} quaternion={quat}>
+      {/* Head, placed after shaft */}
+      <mesh
+        position={[0, shaftLength + headLength / 2, 0]}
+        onPointerEnter={() => setHover(true)}
+        onPointerLeave={() => setHover(false)}
+        onClick={() => setShow((prev) => !prev)}
+      >
         <coneGeometry args={[headRadius, headLength]} />
         <meshStandardMaterial color={color} />
       </mesh>
-    </>
+
+      {/* Text (relative to arrow tip) */}
+      {show && (
+        <Text3D
+          text={`(${to[0]},${to[1]},${to[2]})`}
+          pos={[0.1, shaftLength + headLength + 0.1, 0.1]} // relative offset from tip
+          color="gold"
+          size={0.2}
+          opacity={0.75}
+          faceCamera
+        />
+      )}
+    </group>
   );
 }

@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "../store/store";
-import { delVector, updateVector, type VectorType } from "../store/VectorSlice";
+import type { RootState } from "../../store/store";
+import { delVector, updateVector, type VectorType } from "../../store/VectorSlice";
 import { IoMdTrash } from "react-icons/io";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import z from "zod";
@@ -45,7 +45,7 @@ function Field(props: { vec: VectorType }) {
   };
 
   return (
-    <div className="flex flex-row gap-2 items-center ">
+    <div className="flex flex-row gap-2 justify-between items-center ">
       <div className="flex gap-5">
         <input
           type="text"

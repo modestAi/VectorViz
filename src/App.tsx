@@ -7,19 +7,23 @@ const Scene = lazy(() => import("./components/Scene"));
 const Container = lazy(() => import("./components/Container"));
 
 function App() {
-  const vecList = useSelector((state: RootState) => state.vectorList);
+  const state = useSelector((state: RootState) => state);
   const [cameraReset, setCameraReset] = useState(false);
 
   const requestCameraReset = () => setCameraReset(true);
   const turnOffResetRequest = () => setCameraReset(false);
 
   const max = useMemo(() => {
-    if (vecList.length === 0) return 7;
+    if (state.vectorList.length === 0) return 7;
     return Math.max(
       7,
-      ...vecList.flatMap((v) => [Math.abs(v.vector.x), Math.abs(v.vector.y), Math.abs(v.vector.z)])
+      ...state.vectorList.flatMap((v) => [
+        Math.abs(v.vector.x),
+        Math.abs(v.vector.y),
+        Math.abs(v.vector.z),
+      ])
     );
-  }, [vecList]);
+  }, [state.vectorList]);
 
   return (
     <div className="flex-1 bg-[rgb(15,21,36)]">
@@ -33,6 +37,8 @@ function App() {
         <Container onReset={requestCameraReset} currentState={cameraReset} />
 
         <Scene max={max} afterReset={turnOffResetRequest} cameraResetRequestState={cameraReset} />
+
+
       </Suspense>
     </div>
   );

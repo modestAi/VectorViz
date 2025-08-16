@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { MdRestore, MdSettingsSuggest } from "react-icons/md";
 import { IoMdClose } from "react-icons/io";
-import Form from "./AddForm";
+import Form from "./container-components/AddForm";
 import { AnimatePresence, anticipate, motion } from "framer-motion";
-import FieldLister from "./FieldLister";
+import FieldLister from "./container-components/FieldLister";
 
-export default function Container(props: {currentState:boolean,  onReset: () => void }) {
+export default function Container(props: { currentState: boolean; onReset: () => void }) {
   const [showSettings, setShowSettings] = useState(false);
   const [showFields, setShowFields] = useState(true);
+
 
   const slideFade = {
     initial: { opacity: 0, x: 20 },

@@ -2,7 +2,6 @@ import * as THREE from "three";
 import { Canvas, useThree } from "@react-three/fiber";
 import { useLayoutEffect, useMemo, useRef } from "react";
 import { CameraControls } from "@react-three/drei";
-import type { VectorType } from "../store/VectorSlice";
 import React from "react";
 import Font from "./Font";
 import { useSelector } from "react-redux";
@@ -19,11 +18,7 @@ type SceneProps = {
 };
 
 export default function Scene({ afterReset, cameraResetRequestState, max = 10 }: SceneProps) {
-  const vecList = useSelector((state: RootState) => state.vectorList);
   const defaultPos = useMemo(() => new THREE.Vector3(1, 1, max + 1), [max]);
-
-
-
   const controlsRef = useRef<CameraControls>(null!); //Will exist
 
   return (
@@ -33,7 +28,6 @@ export default function Scene({ afterReset, cameraResetRequestState, max = 10 }:
       camera={{ fov: 90, near: 0.01, far: 2000, position: [1, 1, max + 1] }}
     >
       <SceneContents
-        vecList={vecList}
         max={max}
         defaultPos={defaultPos}
         controlsRef={controlsRef}
@@ -45,14 +39,12 @@ export default function Scene({ afterReset, cameraResetRequestState, max = 10 }:
 }
 
 function SceneContents({
-  vecList,
   max,
   defaultPos,
   controlsRef,
   cameraResetRequestState,
   afterReset,
 }: {
-  vecList: VectorType[];
   max: number;
   defaultPos: THREE.Vector3;
   controlsRef: React.RefObject<CameraControls>; // OK now
@@ -60,11 +52,8 @@ function SceneContents({
   afterReset: () => void;
 }) {
   const three = useThree();
-
+  const state = useSelector((state: RootState) => state);
   const { x, y, z } = defaultPos;
-
-
-
 
   // Set initial camera position before first frame
   useLayoutEffect(() => {
@@ -76,22 +65,25 @@ function SceneContents({
     if (cameraResetRequestState && controlsRef.current) {
       controlsRef.current.setLookAt(x, y, z, 0, 0, 0, true);
 
-      const handleRest = () => {
+      const doAfterCameraTransition = () => {
         afterReset();
-        controlsRef.current.removeEventListener("sleep", handleRest);
+        controlsRef.current.removeEventListener("sleep", doAfterCameraTransition);
       };
 
-      controlsRef.current.addEventListener("sleep", handleRest);
+      controlsRef.current.addEventListener("sleep", doAfterCameraTransition);
     }
   }, [cameraResetRequestState, controlsRef, afterReset, defaultPos]);
 
   return (
     <>
       <CoordinateSystem max={max} />
-      {vecList.map((v) => (
+      {state.vectorList.map((v) => (
         <React.Fragment key={v.id}>
-          <SolidArrow from={[0, 0, 0]} to={v.vector.toArray()} />
-          <CircleContainer vec={v} />
+          {state.sceneConfig.type === "Vector" ? (
+            <SolidArrow from={[0, 0, 0]} to={v.vector.toArray()} />
+          ) : (
+            <CircleContainer vec={v} />
+          )}
         </React.Fragment>
       ))}
 
@@ -99,8 +91,8 @@ function SceneContents({
       <Font text="Y" pos={[-0.1, max, 0]} color="rgb(212,25,35)" size={0.3} opacity={1} />
       <Font text="Z" pos={[0.1, -0.1, max]} color="rgb(0,0,235)" size={0.3} opacity={1} />
 
-      <Lights />
-      <CameraControls ref={controlsRef} />
+      <Lights max={max} />
+      <CameraControls dampingFactor={1} azimuthRotateSpeed={0.75} ref={controlsRef} />
     </>
   );
 }
