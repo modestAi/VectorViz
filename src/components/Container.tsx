@@ -50,8 +50,7 @@ export default function Container(props: { currentState: boolean; onReset: () =>
                   >
                     Hide fields
                   </button>
-                  {/* This part scrolls */}
-                  <div className="overflow-y-auto flex-1 min-h-0 pr-1">
+                  <div className="overflow-y-auto flex-1 min-h-0 pr-1 [scrollbar-gutter:stable]">
                     <FieldLister />
                   </div>
                 </div>
@@ -69,7 +68,6 @@ export default function Container(props: { currentState: boolean; onReset: () =>
           )}
         </div>
       </AnimatePresence>
-      {/* Restore button now in normal flow */}
 
       <motion.div
         layout

@@ -6,6 +6,7 @@ import { setMaxDist } from "./store/SceneConfigSlice";
 
 const Scene = lazy(() => import("./components/Scene"));
 const Container = lazy(() => import("./components/Container"));
+const Github = lazy(() => import("./components/Github"));
 
 function App() {
   const state = useSelector((state: RootState) => state);
@@ -27,10 +28,9 @@ function App() {
   }, [state.vectorList]);
 
   const dispatch = useDispatch<AppDispatch>();
-  useEffect(()=>{
-
-    dispatch(setMaxDist(max))
-  },[max])
+  useEffect(() => {
+    dispatch(setMaxDist(max));
+  }, [max]);
 
   return (
     <div className="flex-1 bg-[rgb(15,21,36)]">
@@ -42,10 +42,8 @@ function App() {
         }
       >
         <Container onReset={requestCameraReset} currentState={cameraReset} />
-
-        <Scene  afterReset={turnOffResetRequest} cameraResetRequestState={cameraReset} />
-
-
+        <Scene afterReset={turnOffResetRequest} cameraResetRequestState={cameraReset} />
+        <Github />
       </Suspense>
     </div>
   );
