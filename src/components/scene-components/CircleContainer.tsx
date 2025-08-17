@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import type { VectorType } from "../../store/VectorSlice";
 import Text3D from "./Font";
 
-
 export function CircleContainer({ vec }: { vec: VectorType }) {
   const { x, y, z } = vec.vector;
   const [show, setShow] = useState(false);
@@ -31,8 +30,8 @@ export function CircleContainer({ vec }: { vec: VectorType }) {
           opacity={0.75}
         />
       )}
-      <sphereGeometry args={[0.05]} />
-      <meshPhysicalMaterial color="red" />
+      <sphereGeometry args={[0.09]} />
+      <meshPhysicalMaterial color="red" opacity={0.75} />
     </mesh>
   );
 }

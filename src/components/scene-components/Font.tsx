@@ -1,7 +1,7 @@
 import { useMemo, useRef } from "react";
 import { FontLoader, Font } from "three/examples/jsm/loaders/FontLoader.js";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry.js";
-import myFontJson from "../assets/helvetiker_regular.typeface.json";
+import myFontJson from "../../assets/helvetiker_regular.typeface.json";
 import { useFrame, useThree } from "@react-three/fiber";
 import type { Mesh } from "three";
 
@@ -25,7 +25,7 @@ export default function Text3D(props: {
       size: props.size,
       depth: 0,
     });
-  }, []);
+  }, [props.pos, props.text, props.size]);
 
   useFrame(() => {
     if (faceCamera) {

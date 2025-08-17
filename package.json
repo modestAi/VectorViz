@@ -24,7 +24,6 @@
     "react-redux": "^9.2.0",
     "tailwindcss": "^4.1.11",
     "three": "^0.179.1",
-    "troika-3d-text": "^0.52.4",
     "uuid": "^11.1.0",
     "zod": "^4.0.17"
   },

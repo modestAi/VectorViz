@@ -6,12 +6,12 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as THREE from "three";
-import { schema } from "./AddForm";
+import { schema } from "./FieldAdderForm";
 
 function FieldLister() {
   const vecList = useSelector((data: RootState) => data.vectorList);
   return (
-    <div className="flex gap-1 flex-col">
+    <div className="flex gap-1 flex-col overflow-auto">
       {vecList.map((e) => (
         <Field key={e.id} vec={e} />
       ))}

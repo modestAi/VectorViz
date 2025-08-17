@@ -1,7 +1,8 @@
-import { useSelector } from "react-redux";
-import type { RootState } from "./store/store";
-import { useState, useMemo, lazy, Suspense } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "./store/store";
+import { useState, useMemo, lazy, Suspense, useEffect } from "react";
 import Spinner from "./components/Spinner";
+import { setMaxDist } from "./store/SceneConfigSlice";
 
 const Scene = lazy(() => import("./components/Scene"));
 const Container = lazy(() => import("./components/Container"));
@@ -25,6 +26,12 @@ function App() {
     );
   }, [state.vectorList]);
 
+  const dispatch = useDispatch<AppDispatch>();
+  useEffect(()=>{
+
+    dispatch(setMaxDist(max))
+  },[max])
+
   return (
     <div className="flex-1 bg-[rgb(15,21,36)]">
       <Suspense
@@ -36,7 +43,7 @@ function App() {
       >
         <Container onReset={requestCameraReset} currentState={cameraReset} />
 
-        <Scene max={max} afterReset={turnOffResetRequest} cameraResetRequestState={cameraReset} />
+        <Scene  afterReset={turnOffResetRequest} cameraResetRequestState={cameraReset} />
 
 
       </Suspense>
