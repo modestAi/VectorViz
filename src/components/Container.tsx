@@ -45,19 +45,19 @@ export default function Container(props: { currentState: boolean; onReset: () =>
               {showFields ? (
                 <div className="flex flex-col gap-0.5 flex-1 min-h-0">
                   <button
-                    className="cursor-pointer self-end text-[12px] text-slate-400"
+                    className="cursor-pointer duration-200  hover:text-slate-300 self-end text-[12px] text-slate-400"
                     onClick={() => setShowFields(false)}
                   >
                     Hide fields
                   </button>
-                  <div className="overflow-y-auto flex-1 min-h-0 pr-1 [scrollbar-gutter:stable]">
+                  <div className="overflow-y-auto flex-1 min-h-0 pr-1">
                     <FieldLister />
                   </div>
                 </div>
               ) : (
                 <div className="flex flex-col">
                   <button
-                    className="cursor-pointer self-end text-[12px] text-slate-400"
+                    className="cursor-pointer  duration-200 self-end hover:text-slate-300 text-[12px] text-slate-400"
                     onClick={() => setShowFields(true)}
                   >
                     Show fields

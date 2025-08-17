@@ -1,28 +1,34 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import * as THREE from "three";
 import { v4 as uuidv4 } from "uuid";
+import { Color } from "../utils/Colors";
+
+type CoordinateType = {
+  x: number;
+  y: number;
+  z: number;
+};
 
 export type VectorType = {
   id: string;
-  vector: THREE.Vector3;
+  vector: CoordinateType;
+  color: string;
 };
 
 // some default seed vectors
 const seedVectors = [
   new THREE.Vector3(5, 3, 4),
   new THREE.Vector3(3, 1, -4),
-  new THREE.Vector3(-2, 4, 1),
-  new THREE.Vector3(0, -3, 5),
+  new THREE.Vector3(0, 3, 2),
   new THREE.Vector3(2, -2, -1),
-  new THREE.Vector3(-5, 0, 2),
+  new THREE.Vector3(-3, 0, 2),
   new THREE.Vector3(1, -2, -3),
-  new THREE.Vector3(-4, -2, -1),
 ];
 
-// attach ids
 const initialState: VectorType[] = seedVectors.map((vec) => ({
   id: uuidv4(),
-  vector: vec,
+  vector: { x: vec.x, y: vec.y, z: vec.z },
+  color: Color.randomColor(),
 }));
 
 const VecSlice = createSlice({
@@ -46,8 +52,11 @@ const VecSlice = createSlice({
   },
 });
 
-function vecExists(vecList: THREE.Vector3[], vec2: THREE.Vector3) {
-  return vecList.some((vec) => vec.equals(vec2));
+function vecExists(vecList: CoordinateType[], vec2: CoordinateType) {
+  return vecList.some((vec1) => {
+    if (vec1.x === vec2.x && vec1.y === vec2.y && vec1.z === vec2.z) return true;
+    else return false;
+  });
 }
 
 export const { addVector, delVector, updateVector } = VecSlice.actions;

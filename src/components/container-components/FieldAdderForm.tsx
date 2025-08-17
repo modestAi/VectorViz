@@ -4,8 +4,8 @@ import z from "zod";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as THREE from "three";
 import { v4 as uuidv4 } from "uuid";
+import { Color } from "../../utils/Colors";
 
 const constraint = z
   .string()
@@ -33,7 +33,8 @@ function FieldAdderForm() {
     dispatch(
       addVector({
         id: uuidv4(),
-        vector: new THREE.Vector3(data.x, data.y, data.z),
+        vector: { x: data.x, y: data.y, z: data.z },
+        color: Color.randomColor(),
       })
     );
     form.reset();

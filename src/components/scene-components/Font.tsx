@@ -12,8 +12,9 @@ export default function Text3D(props: {
   size: number;
   opacity: number;
   faceCamera?: boolean;
+  depth?: number;
 }) {
-  const { faceCamera = false } = props;
+  const { faceCamera = false, depth = 0 } = props;
   const ref = useRef<Mesh | null>(null);
   const { camera } = useThree();
   const textGeometry = useMemo(() => {
@@ -23,7 +24,7 @@ export default function Text3D(props: {
     return new TextGeometry(props.text, {
       font,
       size: props.size,
-      depth: 0,
+      depth: depth,
     });
   }, [props.pos, props.text, props.size]);
 

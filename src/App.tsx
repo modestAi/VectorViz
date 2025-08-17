@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "./store/store";
 import { useState, useMemo, lazy, Suspense, useEffect } from "react";
-import Spinner from "./components/Spinner";
+import Loader from "./components/Loader";
 import { setMaxDist } from "./store/SceneConfigSlice";
 
 const Scene = lazy(() => import("./components/Scene"));
@@ -37,7 +37,7 @@ function App() {
       <Suspense
         fallback={
           <div className="absolute inset-0 flex items-center justify-center bg-slate-950 z-50  ">
-            <Spinner />
+            <Loader />
           </div>
         }
       >

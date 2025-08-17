@@ -27,9 +27,9 @@ function Field(props: { vec: VectorType }) {
 
   const form = useForm<InputType, undefined, InferType>({
     defaultValues: {
-      x: String(vector.getComponent(0)),
-      y: String(vector.getComponent(1)),
-      z: String(vector.getComponent(2)),
+      x: String(vector.x),
+      y: String(vector.y),
+      z: String(vector.z),
     },
     resolver: zodResolver(schema),
   });
@@ -40,6 +40,7 @@ function Field(props: { vec: VectorType }) {
     const obj: VectorType = {
       id: props.vec.id,
       vector: new THREE.Vector3(data.x, data.y, data.z),
+      color: props.vec.color,
     };
     dispatch(updateVector({ vector: obj }));
   };

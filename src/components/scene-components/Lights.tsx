@@ -2,15 +2,20 @@ import { useSelector } from "react-redux";
 import type { RootState } from "../../store/store";
 
 export function Lights() {
-  const selector = useSelector((data: RootState) => data);
+  const max = useSelector((data: RootState) => data.sceneConfig.maxDist);
 
-  const max = selector.sceneConfig.maxDist;
+  const color = new String("white");
+  const intensity = new Number(0.4);
+
   return (
     <>
-      <ambientLight intensity={0.3} color="white" />
-      <directionalLight position={[max, max, 0]} intensity={0.4} color="white" />
-      <directionalLight position={[0, max, max]} intensity={0.4} color="white" />
-      <directionalLight position={[max, 0, max]} intensity={0.4} color="white" />
+      <ambientLight intensity={0.3} color="rgb(255,255,255)" />
+      <directionalLight position={[max, max, 0]} {...color} {...intensity} />
+      <directionalLight position={[0, max, max]} {...color} {...intensity} />
+      <directionalLight position={[max, 0, max]} {...color} {...intensity} />
+      <directionalLight position={[-max, -max, 0]} {...intensity} {...color} />
+      <directionalLight position={[0, -max, -max]} {...intensity} {...color} />
+      <directionalLight position={[-max, 0, -max]} {...intensity} {...color} />
     </>
   );
 }

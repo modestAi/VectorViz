@@ -1,24 +1,23 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import type { VectorType } from "../../store/VectorSlice";
 import Text3D from "./Font";
 
-export function CircleContainer({ vec }: { vec: VectorType }) {
+export function CircleContainer({
+  vec,
+  onHoverChange,
+}: {
+  vec: VectorType;
+  onHoverChange?: (hover: boolean) => void;
+}) {
   const { x, y, z } = vec.vector;
   const [show, setShow] = useState(false);
-  const [hovered, setHovered] = useState(false);
-
-  useEffect(() => {
-    hovered
-      ? (window.document.body.style.cursor = "pointer")
-      : (window.document.body.style.cursor = "default");
-  }, [hovered]);
 
   return (
     <mesh
+      onPointerOver={() => onHoverChange?.(true)}
+      onPointerOut={() => onHoverChange?.(false)}
       position={[x, y, z]}
       onClick={() => setShow((prev) => !prev)}
-      onPointerOver={() => setHovered(true)}
-      onPointerOut={() => setHovered(false)}
     >
       {show && (
         <Text3D
