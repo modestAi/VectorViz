@@ -9,7 +9,6 @@ export class Color {
   static sunflower = "rgb(255,218,41)";
   static honey = "rgb(255,201,71)";
   static chartreuse = "rgb(127,255,0)";
-  static springGreen = "rgb(0,255,127)";
   static mint = "rgb(152,255,152)";
   static aquamarine = "rgb(127,255,212)";
   static turquoise = "rgb(64,224,208)";
@@ -22,21 +21,17 @@ export class Color {
   static hotPink = "rgb(255,105,180)";
   static blush = "rgb(222,93,131)";
   static carnation = "rgb(255,166,201)";
-  static violetRed = "rgb(208,32,144)";
-  static mediumViolet = "rgb(199,21,133)";
   static amethyst = "rgb(153,102,204)";
   static lilac = "rgb(200,162,200)";
   static mauve = "rgb(224,176,255)";
   static heliotrope = "rgb(223,115,255)";
   static plum = "rgb(221,160,221)";
   static wisteria = "rgb(201,160,220)";
-  static grape = "rgb(128,0,128)";
   static mulberry = "rgb(197,75,140)";
   static mayaBlue = "rgb(115,194,251)";
   static cornflower = "rgb(100,149,237)";
   static cerulean = "rgb(0,123,167)";
   static lagoon = "rgb(0,199,190)";
-  static malachite = "rgb(11,218,81)";
 
   static allColors(): string[] {
     return Object.values(Color).filter((v) => typeof v === "string") as string[];

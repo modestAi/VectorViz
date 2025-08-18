@@ -5,7 +5,7 @@ import myFontJson from "../../assets/helvetiker_regular.typeface.json";
 import { useFrame, useThree } from "@react-three/fiber";
 import type { Mesh } from "three";
 
-export default function Text3D(props: {
+export type Text3DPropsType = {
   text: string;
   pos: [number, number, number];
   color: string;
@@ -13,7 +13,9 @@ export default function Text3D(props: {
   opacity: number;
   faceCamera?: boolean;
   depth?: number;
-}) {
+}
+
+export default function Text3D(props: Text3DPropsType) {
   const { faceCamera = false, depth = 0 } = props;
   const ref = useRef<Mesh | null>(null);
   const { camera } = useThree();

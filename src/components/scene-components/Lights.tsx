@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux";
 import type { RootState } from "../../store/store";
+import type { CoordTuple } from "../../utils/Types";
 
 export function Lights() {
   const max = useSelector((data: RootState) => data.sceneConfig.maxDist);
@@ -7,15 +8,17 @@ export function Lights() {
   const color = new String("white");
   const intensity = new Number(0.4);
 
+  const dirLightPositions: CoordTuple[] = [[max, max, 0],
+  [0, max, max],
+  [max, 0, max],
+  [-max, -max, 0],
+  [0, -max, -max],
+  [-max, 0, -max]]
+
   return (
     <>
       <ambientLight intensity={0.3} color="rgb(255,255,255)" />
-      <directionalLight position={[max, max, 0]} {...color} {...intensity} />
-      <directionalLight position={[0, max, max]} {...color} {...intensity} />
-      <directionalLight position={[max, 0, max]} {...color} {...intensity} />
-      <directionalLight position={[-max, -max, 0]} {...intensity} {...color} />
-      <directionalLight position={[0, -max, -max]} {...intensity} {...color} />
-      <directionalLight position={[-max, 0, -max]} {...intensity} {...color} />
+      {dirLightPositions.map(e => <directionalLight position={e} {...color} {...intensity} />)}
     </>
   );
 }

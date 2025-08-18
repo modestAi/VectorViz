@@ -1,9 +1,9 @@
 import { useState } from "react";
 import type { VectorType } from "../../store/VectorSlice";
-import Text3D from "./Font";
+import Text3D from "./Text3D";
 import { useThree } from "@react-three/fiber";
 
-export function CircleContainer({ vec }: { vec: VectorType }) {
+export function Point({ vec }: { vec: VectorType }) {
   const { x, y, z } = vec.vector;
   const [show, setShow] = useState(false);
 
@@ -20,7 +20,7 @@ export function CircleContainer({ vec }: { vec: VectorType }) {
           faceCamera={true}
           text={`(${x},${y},${z})`}
           pos={[0.1, 0.1, 0.1]}
-          color={"gold"}
+          color={"rgb(244,200,15)"}
           size={0.1}
           opacity={0.75}
         />

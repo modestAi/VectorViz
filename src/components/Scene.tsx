@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
 import { SolidArrow } from "./scene-components/SolidArrow";
 import { CoordinateSystem } from "./scene-components/CoordinateSystem";
-import { CircleContainer } from "./scene-components/CircleContainer";
+import { Point } from "./scene-components/Point";
 import { Lights } from "./scene-components/Lights";
 
 type SceneProps = {
@@ -94,7 +94,7 @@ function SceneContents({
             isShowable={true}
           />
         ) : (
-          <CircleContainer key={v.id} vec={v} />
+          <Point key={v.id} vec={v} />
         )
       )}
       <Lights />

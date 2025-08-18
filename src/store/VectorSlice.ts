@@ -15,13 +15,11 @@ export type VectorType = {
   color: string;
 };
 
-// some default seed vectors
+// default seed vectors
 const seedVectors = [
-  new THREE.Vector3(5, 3, 4),
   new THREE.Vector3(3, 1, -4),
-  new THREE.Vector3(0, 3, 2),
-  new THREE.Vector3(2, -2, -1),
-  new THREE.Vector3(-3, 0, 2),
+  new THREE.Vector3(3, 1, 3),
+  new THREE.Vector3(2, 2, -1),
   new THREE.Vector3(1, -2, -3),
 ];
 
@@ -46,7 +44,7 @@ const VecSlice = createSlice({
     updateVector: (state, action: PayloadAction<{ vector: VectorType }>) => {
       const index = state.findIndex((e) => e.id === action.payload.vector.id);
       if (index >= 0) {
-        state[index] = action.payload.vector; // mutate directly
+        state[index] = action.payload.vector;
       }
     },
   },

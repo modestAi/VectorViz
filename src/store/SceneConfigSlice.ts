@@ -18,5 +18,4 @@ const configSlice = createSlice({
 });
 
 export const { setType, setMaxDist } = configSlice.actions;
-
 export default configSlice.reducer;

@@ -4,44 +4,62 @@ import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../store/store";
 import { setType } from "../../store/SceneConfigSlice";
 import z from "zod";
+import { motion } from "framer-motion";
 
 const schema = z.object({
   show: z.enum(["Vector", "Point"]),
 });
 
 type InputType = z.input<typeof schema>;
-type InferType = z.input<typeof schema>;
-
 export default function SelectTypeForm() {
-  const selector = useSelector((data: RootState) => data);
+  const type = useSelector((state: RootState) => state.sceneConfig.type);
   const dispatch = useDispatch();
-  const form2 = useForm<InputType, undefined, InferType>({
+
+  const form = useForm<InputType>({
     resolver: zodResolver(schema),
-    defaultValues: {
-      show: selector.sceneConfig.type,
-    },
+    defaultValues: { show: type },
   });
 
-  const handleToggle: SubmitHandler<InferType> = (data) => {
-    dispatch(setType(data.show));
+
+  const selected = form.watch("show");
+
+  const handleToggle: SubmitHandler<InputType> = (data) => {
+    if (data.show !== type) dispatch(setType(data.show));
   };
 
   return (
-    <>
+    <div className="w-full flex justify-center">
       <form
-        className="p-1 flex gap-5 text-[13px] [&_*]:cursor-pointer"
-        onChange={() => form2.handleSubmit(handleToggle)()}
+        className="relative flex w-full max-w-xs rounded-2xl bg-slate-800/30
+               backdrop-blur-md border border-slate-700/50 shadow-lg overflow-hidden"
+        onChange={form.handleSubmit(handleToggle)}
       >
-        <label className="flex gap-2 ">
-          <input type="radio" value="Vector" {...form2.register("show")} />
-          Show vectors
-        </label>
+        {/* Sliding background */}
+        <motion.div
+          className="absolute top-0 left-0 h-full w-1/2
+                 bg-gradient-to-r from-indigo-500/10 to-purple-500/10
+                 rounded-2xl shadow-inner"
+          animate={{ x: selected === "Vector" ? 0 : "100%" }}
+          transition={{ type: "spring", stiffness: 100, damping: 12 }}
+        />
 
-        <label className="flex gap-2">
-          <input type="radio" value="Point" {...form2.register("show")} />
-          Show points
-        </label>
+        {["Vector", "Point"].map((option) => (
+          <label
+            key={option}
+            className="flex-1 text-sm text-center font-medium text-slate-200
+                   tracking-wide cursor-pointer z-10 py-2
+                   hover:text-white transition-colors"
+          >
+            <input
+              type="radio"
+              value={option}
+              className="hidden"
+              {...form.register("show")}
+            />
+            {option}
+          </label>
+        ))}
       </form>
-    </>
+    </div>
   );
 }
