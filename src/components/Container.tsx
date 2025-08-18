@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { MdRestore, MdSettingsSuggest } from "react-icons/md";
+import { MdOutlineControlCamera } from "react-icons/md";
 import { IoMdClose } from "react-icons/io";
 import FieldAdderForm from "./container-components/FieldAdderForm";
 import { AnimatePresence, anticipate, motion } from "framer-motion";
 import FieldLister from "./container-components/FieldLister";
 import SelectTypeForm from "./container-components/SelectTypeForm";
+import { Tooltip } from "radix-ui";
+import { PiVectorThreeDuotone } from "react-icons/pi";
 
 export default function Container(props: { currentState: boolean; onReset: () => void }) {
   const [showSettings, setShowSettings] = useState(false);
@@ -28,7 +30,7 @@ export default function Container(props: { currentState: boolean; onReset: () =>
               className="rounded p-2 bg-slate-950 text-amber-50 border border-slate-700"
             >
               <button onClick={() => setShowSettings(true)} className="cursor-pointer">
-                <MdSettingsSuggest className="w-7 h-7 fill-slate-400 hover:fill-amber-300 duration-350" />
+                <PiVectorThreeDuotone  className="w-7 h-7 fill-slate-400 hover:fill-amber-300 duration-350" />
               </button>
             </motion.div>
           ) : (
@@ -68,18 +70,32 @@ export default function Container(props: { currentState: boolean; onReset: () =>
           )}
         </div>
       </AnimatePresence>
-
-      <motion.div
-        layout
-        className="rounded  w-fit self-end bg-slate-950 text-amber-50 p-2 border border-slate-700"
-      >
-        <motion.button
-          onClick={() => props.onReset()}
-          className="flex items-center justify-center  cursor-pointer"
-        >
-          <MdRestore className="w-7 h-7 fill-slate-400 hover:fill-amber-300 duration-350" />
-        </motion.button>
-      </motion.div>
+      <Tooltip.Provider>
+        <Tooltip.Root>
+          <Tooltip.Trigger asChild>
+            <motion.div
+              layout
+              className="rounded  w-fit self-end bg-slate-950 text-amber-50 p-2 border border-slate-700"
+            >
+              <motion.button
+                onClick={() => props.onReset()}
+                className="flex items-center justify-center  cursor-pointer"
+              >
+                <MdOutlineControlCamera className="w-7 h-7 fill-slate-400 hover:fill-amber-300 duration-350" />
+              </motion.button>
+            </motion.div>
+          </Tooltip.Trigger>
+          <Tooltip.Portal>
+            <Tooltip.Content
+              side="left"
+              className="bg-slate-800 text-white px-2 py-1 rounded z-1000 "
+            >
+              Reset Camera
+              <Tooltip.Arrow className="fill-slate-800" />
+            </Tooltip.Content>
+          </Tooltip.Portal>
+        </Tooltip.Root>
+      </Tooltip.Provider>
     </div>
   );
 }

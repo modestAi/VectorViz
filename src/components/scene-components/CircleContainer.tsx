@@ -1,21 +1,17 @@
 import { useState } from "react";
 import type { VectorType } from "../../store/VectorSlice";
 import Text3D from "./Font";
+import { useThree } from "@react-three/fiber";
 
-export function CircleContainer({
-  vec,
-  onHoverChange,
-}: {
-  vec: VectorType;
-  onHoverChange?: (hover: boolean) => void;
-}) {
+export function CircleContainer({ vec }: { vec: VectorType }) {
   const { x, y, z } = vec.vector;
   const [show, setShow] = useState(false);
 
+  const canvas = useThree().gl.domElement;
   return (
     <mesh
-      onPointerOver={() => onHoverChange?.(true)}
-      onPointerOut={() => onHoverChange?.(false)}
+      onPointerEnter={() => canvas.classList.add("pointer")}
+      onPointerLeave={() => canvas.classList.remove("pointer")}
       position={[x, y, z]}
       onClick={() => setShow((prev) => !prev)}
     >

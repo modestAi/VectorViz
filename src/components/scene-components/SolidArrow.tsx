@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import * as THREE from "three";
 import Text3D from "./Font";
 import type { CoordTuple } from "../../utils/Types";
+import { useThree } from "@react-three/fiber";
 
 type SolidArrowProps = {
   from?: CoordTuple;
@@ -20,8 +21,7 @@ export function SolidArrow({
   isShowable = false,
   shaftRadius = 0.1,
   to,
-  onHoverChange,
-}: SolidArrowProps & { onHoverChange?: (hover: boolean) => void }) {
+}: SolidArrowProps) {
   const [show, setShow] = useState(false);
 
   const { dir, shaftLength } = useMemo(() => {
@@ -32,21 +32,19 @@ export function SolidArrow({
     return { dir: fullDir.normalize(), shaftLength: length - headLength };
   }, [from, to, headLength]);
 
+  const canvas = useThree().gl.domElement;
   const quat = useMemo(() => {
     const q = new THREE.Quaternion();
     q.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir); // orient along arrow direction from y axis (three js def.)
     return q;
   }, [dir]);
 
-  const handleEnter = () => onHoverChange?.(true);
-  const handleLeave = () => onHoverChange?.(false);
-
   return (
     <group position={from} quaternion={quat}>
       <mesh
         position={[0, shaftLength / 2, 0]}
-        onPointerEnter={handleEnter}
-        onPointerLeave={handleLeave}
+        onPointerEnter={() => isShowable && canvas.classList.add("pointer")}
+        onPointerLeave={() => isShowable && canvas.classList.remove("pointer")}
         onClick={() => setShow((prev) => !prev)}
       >
         <cylinderGeometry args={[shaftRadius, shaftRadius, shaftLength]} />
@@ -55,8 +53,8 @@ export function SolidArrow({
 
       <mesh
         position={[0, shaftLength + headLength / 2, 0]}
-        onPointerEnter={handleEnter}
-        onPointerLeave={handleLeave}
+        onPointerEnter={() => isShowable && canvas.classList.add("pointer")}
+        onPointerLeave={() => isShowable && canvas.classList.remove("pointer")}
         onClick={() => setShow((prev) => !prev)}
       >
         <coneGeometry args={[headRadius, headLength]} />

@@ -17,6 +17,7 @@
     "@tailwindcss/vite": "^4.1.11",
     "@types/three": "^0.179.0",
     "framer-motion": "^12.23.12",
+    "radix-ui": "^1.4.3",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-hook-form": "^7.62.0",

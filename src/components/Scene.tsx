@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { Canvas, useThree } from "@react-three/fiber";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { CameraControls, useCursor } from "@react-three/drei";
+import { useLayoutEffect, useMemo, useRef } from "react";
+import { CameraControls } from "@react-three/drei";
 import React from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
@@ -23,10 +23,10 @@ export default function Scene({ afterReset, cameraResetRequestState }: SceneProp
 
   return (
     <Canvas
-      className="canvas"
       gl={{ antialias: true }}
       dpr={[1, 2]}
       ref={ref}
+      className="canvas"
       camera={{ fov: 90, near: 0.01, far: 2000, position: [1, 1, max + 1] }}
     >
       <SceneContents
@@ -50,17 +50,12 @@ function SceneContents({
   cameraResetRequestState: boolean;
   afterReset: () => void;
 }) {
-  const [dragging, setDragging] = useState(false);
-  const [hovering, setHovering] = useState(false);
-
   const three = useThree();
+  const { x, y, z } = defaultPos;
+
   const state = useSelector((state: RootState) => state, {
     devModeChecks: { stabilityCheck: "never" },
   });
-  const { x, y, z } = defaultPos;
-
-  // Centralized cursor
-  useCursor(dragging || hovering, dragging ? "grabbing" : "pointer", "grab");
 
   // Set initial camera position before first frame
   useLayoutEffect(() => {
@@ -83,25 +78,6 @@ function SceneContents({
     return () => controlsRef.current.removeEventListener("rest", doAfterCameraTransition);
   }, [cameraResetRequestState, controlsRef, afterReset, defaultPos]);
 
-  useEffect(() => {
-    if (!controlsRef.current) return;
-    const controls = controlsRef.current;
-
-    const onDragStart = () => {
-      setDragging(true);
-      setHovering(false);
-    };
-    const onDragEnd = () => setDragging(false);
-
-    controls.addEventListener("controlstart", onDragStart);
-    controls.addEventListener("controlend", onDragEnd);
-
-    return () => {
-      controls.removeEventListener("controlstart", onDragStart);
-      controls.removeEventListener("controlend", onDragEnd);
-    };
-  }, [controlsRef]);
-
   return (
     <>
       <CoordinateSystem />
@@ -116,10 +92,9 @@ function SceneContents({
             headRadius={0.1}
             shaftRadius={0.06}
             isShowable={true}
-            onHoverChange={setHovering}
           />
         ) : (
-          <CircleContainer key={v.id} vec={v} onHoverChange={setHovering} />
+          <CircleContainer key={v.id} vec={v} />
         )
       )}
       <Lights />

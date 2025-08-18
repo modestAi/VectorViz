@@ -44,4 +44,22 @@ body {
       background-size: 100%
     }
   }
+
+
+}
+
+
+.canvas .pointer {
+  cursor: pointer;
+}
+
+.canvas:active .pointer {
+  cursor: pointer;
+}
+
+.canvas{
+  cursor: grab;
+  &:active{
+    cursor: grabbing;
+  }
 }
