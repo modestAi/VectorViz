@@ -16,3 +16,5 @@ Instead of looking at flat diagrams, you can grab a vector, move it around, and 
 * **Manage vectors** → add, edit, or delete directly through the controls.
 * **Reset view** → one click smoothly returns the camera to its starting position.
 * **Switch modes** → flip between vector and point representations for different perspectives.
+
+Live on : [vectorviz.netlify.app](https://vectorviz.netlify.app/)
