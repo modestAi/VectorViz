@@ -8,12 +8,14 @@ export function Lights() {
   const color = new String("white");
   const intensity = new Number(0.4);
 
-  const dirLightPositions: CoordTuple[] = [[max, max, 0],
-  [0, max, max],
-  [max, 0, max],
-  [-max, -max, 0],
-  [0, -max, -max],
-  [-max, 0, -max]]
+  const dirLightPositions: CoordTuple[] = [
+    [max, max, 0],
+    [0, max, max],
+    [max, 0, max],
+    [-max, -max, 0],
+    [0, -max, -max],
+    [-max, 0, -max]
+  ]
 
   return (
     <>

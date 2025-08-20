@@ -53,7 +53,7 @@ export default function SelectTypeForm() {
             <input
               type="radio"
               value={option}
-              className="hidden"
+              className="sr-only"
               {...form.register("show")}
             />
             {option}

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import * as THREE from "three";
 import Text3D from "./Text3D";
 import type { CoordTuple } from "../../utils/Types";
