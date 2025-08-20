@@ -51,7 +51,7 @@ function FieldAdderForm() {
           </div>
           <button
             type="submit"
-            className="rounded-[50%] w-7 h-7 hover:bg-overlay-light-0 p-1 cursor-pointer"
+            className="rounded-[50%] w-7 h-7 hover:bg-emerald-500/20 p-1 cursor-pointer"
           >
             <IoMdAdd className="fill-emerald-500 h-[100%] w-[100%]" />
           </button>

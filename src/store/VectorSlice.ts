@@ -17,9 +17,9 @@ export type VectorType = {
 
 // default seed vectors
 const seedVectors = [
-  new THREE.Vector3(3, 1, -4),
-  new THREE.Vector3(3, 1, 3),
-  new THREE.Vector3(2, 2, -1),
+  new THREE.Vector3(3, 4, -4),
+  new THREE.Vector3(-3, 1, 3),
+  new THREE.Vector3(2, 1, 2),
   new THREE.Vector3(1, -2, -3),
 ];
 

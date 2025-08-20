@@ -19,7 +19,7 @@ export function Lights() {
 
   return (
     <>
-      <ambientLight intensity={0.3} color="rgb(255,255,255)" />
+      <ambientLight intensity={0.3} color="rgb(270,215,215)" />
       {dirLightPositions.map(e => <directionalLight position={e} {...color} {...intensity} />)}
     </>
   );
