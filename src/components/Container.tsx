@@ -2,7 +2,7 @@ import { useState } from "react";
 import { MdOutlineControlCamera } from "react-icons/md";
 import { IoMdClose } from "react-icons/io";
 import FieldAdderForm from "./container-components/FieldAdderForm";
-import { AnimatePresence, motion, spring, type Variants } from "framer-motion";
+import { AnimatePresence, motion, type Variants } from "framer-motion";
 import FieldLister from "./container-components/FieldLister";
 import SelectTypeForm from "./container-components/SelectTypeForm";
 import { Tooltip } from "radix-ui";
